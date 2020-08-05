@@ -11,11 +11,10 @@ namespace AdoAutoStateTransitionsFunctions
     public static class ProcessWorkItemStateChange
     {
         [FunctionName("ProcessWorkItemStateChange")]
-        public static void Run(
-            [ServiceBusTrigger("statechanges", "statechanges", Connection = "ServiceBusConnectionString")]string inputMessage, 
+        public static void Run([QueueTrigger("work-item-update", Connection = "AzureWebJobsStorage")]string inputMessage, 
             ILogger log)
         {
-            log.LogTrace($"ProcessWorkItemStateChange received: {inputMessage}");
+            log.LogTrace($"ProcessWorkItemStateChange received from queue: {inputMessage}");
 
             string adoOrganization = System.Environment.GetEnvironmentVariable("AdoUrl", EnvironmentVariableTarget.Process);
             log.LogTrace($"Connecting to ADO organization: {adoOrganization}");
